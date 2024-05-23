@@ -37,7 +37,7 @@ pipeline {
         stage('SonarQube Analsyis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Real-Time DevOps Project -Dsonar.projectKey=Real-Time DevOps Project
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Real-Time-DevOps-Project -Dsonar.projectKey=Real-Time-DevOps-Project
  \
                             -Dsonar.java.binaries=. '''
                 }
