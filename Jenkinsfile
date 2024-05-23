@@ -5,6 +5,9 @@ pipeline {
         jdk 'jdk17'
         maven 'maven3'
     }
+    enviornment {
+        SCANNER_HOME= tool 'sonar-scanner'
+    }
 
    
 
@@ -29,6 +32,23 @@ pipeline {
         stage('File System Scan') {
             steps {
                 sh "trivy fs --format table -o trivy-fs-report.html ."
+            }
+        }
+        stage('SonarQube Analsyis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Real-Time DevOps Project -Dsonar.projectKey=Real-Time DevOps Project
+ \
+                            -Dsonar.java.binaries=. '''
+                }
+            }
+        }
+        
+        stage('Quality Gate') {
+            steps {
+                script {
+                  waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                }
             }
         }
     }
