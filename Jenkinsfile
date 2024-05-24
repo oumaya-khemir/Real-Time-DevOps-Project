@@ -62,7 +62,8 @@ pipeline {
             steps {
                script {
                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker build -t qsdf5fdsq/Real-Time-DevOps-Project:latest ."
+                            sh "docker login -u qsdf5fdsq -p 171016*+/-"
+                            //sh "docker build -t qsdf5fdsq/Real-Time-DevOps-Project:latest ."
                     }
                }
             }
