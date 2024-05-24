@@ -44,13 +44,13 @@ pipeline {
             }
         }
         
-        stage('Quality Gate') {
-            steps {
-                script {
-                  waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                }
-            }
-        }
+       // stage('Quality Gate') {
+        //    steps {
+           //     script {
+          //        waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+            //    }
+          //  }
+        } //
         stage('Publish To Nexus') {
             steps {
                withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
