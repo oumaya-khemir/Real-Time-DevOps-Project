@@ -59,14 +59,15 @@ pipeline {
            // }
        // }
         stage('Build & Tag Docker Image') {
-            steps {
-               script {
-                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker login -u qsdf5fdsq -p 171016*+/-"
-                            //sh "docker build -t qsdf5fdsq/Real-Time-DevOps-Project:latest ."
-                    }
-               }
-            }
+            steps{
+               
+                sh "docker login -u khemiroumaya -p 171016*+/-"
+                sh "docker build -t khemiroumaya/DevOpsProject:latest ."
+                sh "docker image push khemiroumaya/DevOpsProject:latest"
+                
+        
+      }
+
         }
     }
 }
