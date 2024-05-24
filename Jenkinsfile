@@ -62,8 +62,8 @@ pipeline {
             steps{
                
                 sh "docker login -u khemiroumaya -p 171016*+/-"
-                sh "docker build -t khemiroumaya/DevOpsProject:latest ."
-                sh "docker image push khemiroumaya/DevOpsProject:latest"
+                sh "docker build -t khemiroumaya/boardshack:latest ."
+                sh "docker image push khemiroumaya/boardshack:latest"
                 
         
       }
