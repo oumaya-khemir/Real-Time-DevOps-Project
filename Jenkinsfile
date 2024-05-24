@@ -51,11 +51,20 @@ pipeline {
             //    }
           //  }
        // } 
-        stage('Publish To Nexus') {
+        //stage('Publish To Nexus') {
+          //  steps {
+            //   withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
+              //      sh "mvn deploy"
+              //  }
+           // }
+       // }
+        stage('Build & Tag Docker Image') {
             steps {
-               withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
-                    sh "mvn deploy"
-                }
+               script {
+                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                            sh "docker build -t qsdf5fdsq/Real-Time-DevOps-Project:latest ."
+                    }
+               }
             }
         }
     }
