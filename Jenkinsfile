@@ -44,30 +44,44 @@ pipeline {
             }
         }
         
-       // stage('Quality Gate') {
+        stage('Quality Gate') {
         //    steps {
            //     script {
           //        waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
             //    }
           //  }
-       // } 
-        //stage('Publish To Nexus') {
+        } 
+        stage('Publish To Nexus') {
           //  steps {
             //   withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
               //      sh "mvn deploy"
               //  }
            // }
-       // }
+        }
         stage('Build & Tag Docker Image') {
-            steps{
-               
-                sh "docker login -u khemiroumaya -p 171016*+/-"
-                sh "docker build -t khemiroumaya/boardshack:latest ."
-                sh "docker image push khemiroumaya/boardshack:latest"
-                
+            steps {
+               script {
+                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                            sh "docker build -t khemiroumaya/boardshack:latest ."
+                    }
+               }
+            }
+        }
         
-      }
-
+        stage('Docker Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-image-report.html khemiroumaya/boardshack:latest "
+            }
+        }
+        
+        stage('Push Docker Image') {
+            steps {
+               script {
+                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                            sh "docker push khemiroumaya/boardshack:latest"
+                    }
+               }
+            }
         }
         stage('Docker Image Scan') {
             steps {
