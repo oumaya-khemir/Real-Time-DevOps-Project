@@ -34,24 +34,24 @@ pipeline {
                 sh "trivy fs --format table -o trivy-fs-report.html ."
             }
         }
-       // stage('SonarQube Analsyis') {
-        //    steps {
-          //      withSonarQubeEnv('sonar') {
-            //        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Real-Time-DevOps-Project -Dsonar.projectKey=Real-Time-DevOps-Project \
-               //     -Dsonar.java.binaries=. '''
+        stage('SonarQube Analsyis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Real-Time-DevOps-Project -Dsonar.projectKey=Real-Time-DevOps-Project \
+                    -Dsonar.java.binaries=. '''
                             
-               // }
+                }
     
-           // }
-      //  }
+            }
+        }
         
-       // stage('Quality Gate') {
-         //   steps {
-           //     script {
-             //     waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-               // }
-           // }
-       // } 
+        stage('Quality Gate') {
+            steps {
+                script {
+                  waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                }
+            }
+        } 
         stage('Publish To Nexus') {
             steps {
                withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
