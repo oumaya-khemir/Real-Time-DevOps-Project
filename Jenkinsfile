@@ -69,5 +69,10 @@ pipeline {
       }
 
         }
+        stage('Docker Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-image-report.html khemiroumaya/boardshack:latest "
+            }
+        }
     }
 }
