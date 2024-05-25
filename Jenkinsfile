@@ -41,6 +41,11 @@ pipeline {
                     -Dsonar.java.binaries=. '''
                             
                 }
+                timeout (time: 5, unit: 'MINUTES') {
+                script {
+                  waitForQualityGate abortPipeline: true
+}
+}
             }
         }
         
