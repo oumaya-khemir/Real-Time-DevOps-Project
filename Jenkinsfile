@@ -67,7 +67,7 @@ pipeline {
                     }
                }
             }
-        }
+        }*/
         
         stage('Docker Image Scan') {
             steps {
