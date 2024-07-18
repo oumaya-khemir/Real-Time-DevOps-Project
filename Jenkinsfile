@@ -34,55 +34,7 @@ pipeline {
                 sh "trivy fs --format table -o trivy-fs-report.html ."
             }
         }
-        stage('SonarQube Analsyis') {
-            steps {
-                withSonarQubeEnv('sonar') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Real-Time-DevOps-Project -Dsonar.projectKey=Real-Time-DevOps-Project \
-                    -Dsonar.java.binaries=. '''
-                            
-                }
-    
-            }
-        }
         
-        stage('Quality Gate') {
-            steps {
-                script {
-                  waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                }
-            }
-        } 
-        stage('Publish To Nexus') {
-            steps {
-               withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
-                    sh "mvn deploy"
-                }
-         }
-        }
-        stage('Build & Tag Docker Image') {
-            steps {
-               script {
-                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker build -t khemiroumaya/boardshack:latest ."
-                    }
-               }
-            }
-        }*/
-        
-        stage('Docker Image Scan') {
-            steps {
-                sh "trivy image --format table -o trivy-image-report.html khemiroumaya/boardshack:latest "
-            }
-        }
-        
-        stage('Push Docker Image') {
-            steps {
-               script {
-                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker push khemiroumaya/boardshack:latest"
-                    }
-               }
-            }
             stage('Deploy To Kubernetes') {
             steps {
                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', restrictKubeConfigAccess: false, serverUrl: 'https://10.2.0.4:6443') {
