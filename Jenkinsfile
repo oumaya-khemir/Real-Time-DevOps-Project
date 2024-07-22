@@ -34,7 +34,7 @@ pipeline {
                 sh "trivy fs --format table -o trivy-fs-report.html ."
             }
         }
-        tage('Verify the Deployment') {
+        stage('Verify the Deployment') {
             steps {
                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://10.2.0.4:6443') {
                         sh "kubectl get pods -n webapps"
